@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import { Piano, KeyboardShortcuts, MidiNumbers } from 'react-piano';
-import 'react-piano/dist/styles.css';
+// import 'react-piano/dist/styles.css';
 // import DimensionsProvider from  '../components/DimensionsProvider';
 import SoundfontProvider from '@/components/SoundfontProvider';
 import PianoWithRecording from '@/components/PianoWithRecording';
@@ -115,7 +115,7 @@ class PianoPage extends React.Component {
                 recording={this.state.recording}
                 setRecording={this.setRecording}
                 noteRange={noteRange}
-                width={300}
+                width={500}
                 playNote={playNote}
                 stopNote={stopNote}
                 disabled={isLoading}
@@ -123,13 +123,21 @@ class PianoPage extends React.Component {
               />
             )}
           />
-          <button onClick={this.onClickPlay}>Play</button>
-          <button onClick={this.onClickStop}>Stop</button>
-          <button onClick={this.onClickClear}>Clear</button>
           </div>
-        <div className="mt-5">
+          <div className='piano_options'>
+          <div className='fancy-button pop-onhover bg-gradient1' 
+          onClick={this.onClickPlay}><span>Play</span></div>
+          <div className='fancy-button pop-onhover bg-gradient1' 
+          onClick={this.onClickStop}><span>Stop</span></div>
+          <div className='fancy-button pop-onhover bg-gradient1' 
+          onClick={this.onClickClear}><span>Clear</span></div>
+          </div>
+        <div className="">
           <strong>Recorded notes</strong>
-          <div>{JSON.stringify(this.state.recording.events)}</div>
+          <div className='log-window'>{
+          JSON.stringify(this.state.recording.events)
+            // TODO : beautifullu log the key stokes
+          }</div>
         </div>
       </div>
     );

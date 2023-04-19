@@ -45,7 +45,8 @@ const recordNotes = (midiNumbers, duration) => {
     mode === 'PLAYING' ? currentEvents.map(event => event.midiNumber) : null;
   return (
     <div>
-      <p>{recording.mode}</p>
+      <div className='piano_mode'>{recording.mode}</div>
+      <div className='piano'>
       <Piano
         playNote={playNote}
         stopNote={stopNote}
@@ -54,6 +55,7 @@ const recordNotes = (midiNumbers, duration) => {
         activeNotes={activeNotes}
         {...pianoProps}
       />
+    </div>
     </div>
   );
 };
