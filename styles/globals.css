@@ -1,265 +1,997 @@
-body {
+/* Reset and base styles */
+* {
   margin: 0;
-  height: 100vh;
-  width: 100vw;
-  background-image: linear-gradient(rgb(14, 116, 184), rgb(38, 179, 235));
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow-x: hidden;
+}
+
+/* Piano App Layout */
+.piano-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background:
+    radial-gradient(ellipse at top, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  backdrop-filter: blur(10px);
+}
+
+/* Header */
+.app-header {
+  padding: 2rem 2rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.app-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.title-main {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(45deg, #ffffff, #e0e0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.title-sub {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: -5px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile Header Adjustments */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 1rem 1rem 0.5rem;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  
+  .title-main {
+    font-size: 2rem;
+  }
+  
+  .title-sub {
+    font-size: 1rem;
+  }
+  
+  .status-indicator {
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+  }
+  
+  .status-text {
+    font-size: 0.8rem;
+  }
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.status-dot.idle {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.status-dot.recording {
+  background: #ff4757;
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
+  animation: pulse 2s infinite;
+}
+
+.status-dot.playing {
+  background: #2ed573;
+  box-shadow: 0 0 20px rgba(46, 213, 115, 0.5);
+}
+
+.status-text {
+  color: white;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* Piano Section */
+.piano-section {
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
-.bg-gradient1 span,
-.bg-gradient1:before {
-  background: #52A0FD;
-  background: linear-gradient(to right, #52A0FD 0%, #00e2fa 80%, #00e2fa 100%);
-}
-
-.bg-gradient2 span,
-.bg-gradient2:before {
-  background: #44ea76;
-  background: linear-gradient(to right, #44ea76 0%, #39fad7 80%, #39fad7 100%);
-}
-
-.bg-gradient3 span,
-.bg-gradient3:before {
-  background: #fa6c9f;
-  background: linear-gradient(to right, #fa6c9f 0%, #ffe140 80%, #ffe140 100%);
-}
-
-/* General */
-.wrapper {
-  margin: 5% auto;
-  text-align: center;
-  transform-style: perserve-3d;
-  perspective: 800px;
-}
-
-a {
-  text-decoration: none;
-}
-
-a:hover,
-a:focus,
-a:active {
-  text-decoration: none;
-}
-
-/* fancy Button */
-.fancy-button {
-  display: inline-block;
-  margin: 30px;
-  font-family: "Montserrat", Helvetica, Arial, sans-serif;
-  font-size: 17px;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: #ffffff;
+.piano-container {
   position: relative;
+  width: 100%;
+  max-width: 900px;
 }
 
-.fancy-button:before {
-  content: "";
-  display: inline-block;
-  height: 40px;
-  position: absolute;
-  bottom: -5px;
-  left: 30px;
-  right: 30px;
-  z-index: -1;
-  border-radius: 30em;
-  filter: blur(20px) brightness(0.95);
-  transform-style: preserve-3d;
-  transition: all 0.3s ease-out;
-}
-
-.fancy-button i {
-  margin-top: -1px;
-  margin-right: 20px;
-  font-size: 1.265em;
-  vertical-align: middle;
-}
-
-.fancy-button span {
-  display: inline-block;
-  padding: 18px 60px;
-  border-radius: 50em;
-  position: relative;
-  z-index: 2;
-  will-change: transform, filter;
-  transform-style: preserve-3d;
-  transition: all 0.3s ease-out;
-}
-
-.fancy-button:focus,
-.fancy-button:active {
-  color: #ffffff;
-}
-
-.fancy-button:hover {
-  color: #ffffff;
-}
-
-.fancy-button:hover span {
-  filter: brightness(1.05) contrast(1.05);
-  transform: scale(0.95);
-}
-
-.fancy-button:hover:before {
-  bottom: 0;
-  filter: blur(10px) brightness(0.95);
-}
-
-.fancy-button.pop-onhover:before {
-  opacity: 0;
-  bottom: 10px;
-}
-
-.fancy-button.pop-onhover:hover:before {
-  bottom: -7px;
-  opacity: 1;
-  filter: blur(20px);
-}
-
-.fancy-button.pop-onhover:hover span {
-  transform: scale(1.04);
-}
-
-.fancy-button.pop-onhover:hover:active span {
-  filter: brightness(1) contrast(1);
-  transform: scale(1);
-  transition: all 0.15s ease-out;
-}
-
-.fancy-button.pop-onhover:hover:active:before {
-  bottom: 0;
-  filter: blur(10px) brightness(0.95);
-  transition: all 0.2s ease-out;
-}
-
-.log-window {
-  overflow: auto;
-  display: flex;
-  flex-direction: column-reverse;
-  border: 2px solid white;
+.piano-wrapper {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
   border-radius: 24px;
-  padding: 24px;
-  height: 200px;
-  width: 80vw;
-  color: white;
-  background-color: black;
-  scroll-behavior: smooth;
-}
-
-.log-window::-webkit-scrollbar {
-  display: none;
-  /* for Chrome, Safari, and Opera */
-}
-
-/* Piano stuff */
-.piano_options button {
-  border: none;
-  outline: none;
-}
-
-.piano_mode {
-  margin-bottom: 5vh;
-  font-size: xx-large;
-  border: 2px solid #52A0FD;
-  color: #52A0FD;
-  border-radius: 24px;
-  padding: 24px;
-  text-align: center;
-}
-
-.piano_board {
-  margin: 5vh;
-  top: 0%;
-}
-
-.ReactPiano__Keyboard {
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   position: relative;
-  display: flex;
+  overflow: hidden;
 }
 
-.ReactPiano__Key {
-  display: flex;
+/* Mobile Piano Section Adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+    gap: 2rem;
+  }
+  
+  .piano-wrapper {
+    padding: 1rem;
+    border-radius: 16px;
+  }
 }
 
-.ReactPiano__Key--accidental {
-  background: #000;
-  border: 1px solid #fff;
-  border-top: 1px solid transparent;
-  border-radius: 0 0 4px 4px;
-  cursor: pointer;
-  height: 66%;
-  z-index: 1;
+@media (max-width: 480px) {
+  .main-content {
+    padding: 0.5rem;
+    gap: 1.5rem;
+  }
+  
+  .piano-wrapper {
+    padding: 0.75rem;
+    border-radius: 12px;
+  }
+}
+
+.piano-wrapper::before {
+  content: '';
   position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
 }
 
-.ReactPiano__Key--natural {
-  background: #fff;
-  border: 1px solid #000;
-  border-radius: 0 0 6px 6px;
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(102, 126, 234, 0.3);
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-overlay p {
+  color: #667eea;
+  font-weight: 500;
+}
+
+/* Controls Section */
+.controls-section {
+  display: flex;
+  justify-content: center;
+}
+
+.controls-container {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.control-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  z-index: 0;
-  flex: 1;
-  margin-right: 1px;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  justify-content: center;
 }
 
-.ReactPiano__Key--natural:last-child {
-  margin-right: 0;
+/* Mobile Controls Adjustments */
+@media (max-width: 768px) {
+  .controls-container {
+    gap: 1.5rem;
+  }
+  
+  .control-group {
+    gap: 0.75rem;
+  }
+  
+  .control-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    min-width: 100px;
+    flex: 1;
+  }
+  
+  .btn-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .stat-value {
+    font-size: 1.1rem;
+  }
 }
 
-.ReactPiano__Key--active {
-  background: #52A0FD;
+@media (max-width: 480px) {
+  .control-group {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .control-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    min-width: auto;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+  }
+  
+  .stat-value {
+    font-size: 1rem;
+  }
+  
+  .info-card {
+    padding: 1rem;
+  }
 }
 
-.ReactPiano__Key--active.ReactPiano__Key--accidental {
-  border: 1px solid #fff;
-  border-top: 1px solid #52A0FD;
-  height: 65%;
+.control-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-.ReactPiano__Key--active.ReactPiano__Key--natural {
-  border: 1px solid #52A0FD;
-  height: 98%;
+.control-btn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
-.ReactPiano__Key--disabled.ReactPiano__Key--accidental {
-  background: #ddd;
-  border: 1px solid #999;
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.ReactPiano__Key--disabled.ReactPiano__Key--natural {
-  background: #eee;
-  border: 1px solid #aaa;
+.control-btn.active {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
 }
 
-.ReactPiano__NoteLabelContainer {
-  flex: 1;
-  align-self: flex-end;
+.btn-icon {
+  width: 20px;
+  height: 20px;
 }
 
-.ReactPiano__NoteLabel {
-  font-size: 12px;
+.play-btn:hover:not(:disabled) {
+  background: linear-gradient(45deg, #2ed573, #17c0eb);
+}
+
+.stop-btn:hover:not(:disabled) {
+  background: linear-gradient(45deg, #ff4757, #ff6b7d);
+}
+
+.clear-btn:hover:not(:disabled) {
+  background: linear-gradient(45deg, #ffa726, #ff7043);
+}
+
+.recording-info {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   text-align: center;
-  text-transform: capitalize;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  width: 100%;
 }
 
-.ReactPiano__NoteLabel--accidental {
-  color: #f8e8d5;
-  margin-bottom: 3px;
+.info-card h3 {
+  color: white;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
 
-.ReactPiano__NoteLabel--natural {
-  color: #000;
-  margin-bottom: 3px;
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 100%;
 }
 
-.ReactPiano__NoteLabel--natural.ReactPiano__NoteLabel--active {
-  color: #f8e8d5;
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.stat-value {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* Recording Section */
+.recording-section {
+  display: flex;
+  justify-content: center;
+}
+
+.recording-container {
+  width: 100%;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.recording-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.recording-header h2 {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.recording-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.export-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.recording-display {
+  padding: 2rem;
+}
+
+.notes-preview {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  height: 300px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* Custom scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile Recording Section Adjustments */
+@media (max-width: 768px) {
+  .recording-container {
+    border-radius: 16px;
+  }
+  
+  .recording-header {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .recording-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .recording-actions {
+    width: 100%;
+  }
+  
+  .export-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .recording-display {
+    padding: 1.5rem;
+  }
+  
+  .notes-preview {
+    padding: 1rem;
+    font-size: 0.8rem;
+    height: 250px;
+    max-height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recording-container {
+    border-radius: 12px;
+  }
+  
+  .recording-header {
+    padding: 1rem;
+  }
+  
+  .recording-header h2 {
+    font-size: 1.2rem;
+  }
+  
+  .recording-display {
+    padding: 1rem;
+  }
+  
+  .notes-preview {
+    padding: 0.75rem;
+    font-size: 0.75rem;
+    height: 200px;
+    max-height: 200px;
+    line-height: 1.5;
+  }
+}
+
+/* Webkit scrollbar styling for better appearance */
+.notes-preview::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notes-preview::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.notes-preview::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.notes-preview::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Record Saving Component Styles */
+.save-section {
+  display: flex;
+  justify-content: center;
+}
+
+.save-container {
+  width: 100%;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.record-saving {
+  width: 100%;
+}
+
+.save-section h3 {
+  color: white;
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.save-controls {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile Save Section Adjustments */
+@media (max-width: 768px) {
+  .save-container {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  
+  .save-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .save-controls {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    align-items: center;
+  }
+  
+  .recording-name-input {
+    width: 100%;
+    max-width: none;
+    min-width: auto;
+  }
+  
+  .save-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .retrieve-btn {
+    width: 100%;
+    max-width: 300px;
+    margin: 1.5rem auto 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .save-container {
+    padding: 1rem;
+  }
+  
+  .save-section h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .save-btn, .retrieve-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    min-width: auto;
+    height: 48px;
+  }
+  
+  .recording-name-input {
+    height: 48px;
+    padding: 0.75rem;
+  }
+}
+
+.recording-name-input {
+  flex: 2;
+  min-width: 250px;
+  max-width: 400px;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  box-sizing: border-box;
+  height: 56px;
+}
+
+.recording-name-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.recording-name-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.save-btn, .retrieve-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+  justify-content: center;
+  height: 56px;
+  white-space: nowrap;
+}
+
+.save-btn:hover:not(:disabled), .retrieve-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.save-btn:active:not(:disabled), .retrieve-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.retrieve-btn {
+  margin-bottom: 0;
+  width: 100%;
+  max-width: 300px;
+  margin: 2rem auto 0 auto;
+  display: flex;
+}
+
+.saved-recordings {
+  margin-top: 2rem;
+}
+
+.saved-recordings h2 {
+  color: white;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.recording-item {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.recording-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.recording-header h3 {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.recording-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.export-btn, .delete-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.export-btn {
+  background: rgba(76, 175, 80, 0.8);
+  color: white;
+}
+
+.delete-btn {
+  background: rgba(244, 67, 54, 0.8);
+  color: white;
+}
+
+.export-btn:hover, .delete-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.recording-details {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.recording-details pre {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.recording-full-data {
+  margin-top: 1rem;
+}
+
+.recording-full-data summary {
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  padding: 0.5rem 0;
+  font-weight: 500;
+}
+
+.recording-full-data summary:hover {
+  color: white;
+}
+
+.recording-json {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .save-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .recording-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .recording-actions {
+    align-self: stretch;
+  }
+  
+  .export-btn, .delete-btn {
+    flex: 1;
+    min-height: 44px;
+  }
+  
+  .recording-name-input {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  .save-btn, .retrieve-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    min-width: 100px;
+    min-height: 44px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recording-item {
+    padding: 1rem;
+  }
+  
+  .recording-details {
+    padding: 0.75rem;
+  }
+  
+  .recording-details pre {
+    font-size: 0.8rem;
+  }
+  
+  .recording-json {
+    font-size: 0.75rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Mobile Touch Optimizations */
+@media (max-width: 768px) {
+  /* Prevent text selection on touch devices */
+  * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Allow text selection for inputs and text areas */
+  input, textarea, [contenteditable] {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  
+  /* Improve touch targets */
+  button, .control-btn, .export-btn, .save-btn, .retrieve-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent zoom on input focus */
+  input, select, textarea {
+    font-size: 16px;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .piano-app {
+    background: linear-gradient(135deg, #000000 0%, #333333 100%);
+  }
+  
+  .control-btn, .export-btn, .save-btn {
+    border: 2px solid white;
+  }
 }
