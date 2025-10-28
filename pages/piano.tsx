@@ -4,8 +4,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import { Piano, KeyboardShortcuts, MidiNumbers } from 'react-piano';
-import 'react-piano/dist/styles.css';
-// import DimensionsProvider from  '../components/DimensionsProvider';
 import SoundfontProvider from '@/components/SoundfontProvider';
 import PianoWithRecording from '@/components/PianoWithRecording';
 import RecordSaving from '@/components/RecordSaving';
